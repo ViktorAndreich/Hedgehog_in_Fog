@@ -41,18 +41,33 @@ double divide(int num_args, ...) {
     return result;
 }
 
+typedef struct  
+{
+    const char *name;
+    calculator_function func;
+
+} operation;
+
+operation calc[] =
+{
+    {"Сложение", add},
+    {"Вычитание", subtract},
+    {"Деление", divide}
+
+};
+
+#define NUM_OPERATIONS (sizeof(calc)/sizeof(operation))
+
 int main() {
     int choice, num_args;
     double result;
 
-    // Массив указателей на функции
-    calculator_function operations[] = {add, subtract, divide};
-
     while (1) {
         printf("Выберите операцию:\n");
-        printf("1. Сложение\n");
-        printf("2. Вычитание\n");
-        printf("3. Деление\n");
+        for(int i = 0; i < NUM_OPERATIONS; i++)
+        {
+            printf("%d. %s \n", i+1, calc[i].name);
+        }
         printf("0. Выход\n");
         printf("Введите ваш выбор: ");
         scanf("%d", &choice);
@@ -77,7 +92,33 @@ int main() {
         }
 
         // Вызов функции с помощью указателя
-        result = operations[choice - 1](num_args, arguments[0], arguments[1], arguments[2], arguments[3], arguments[4]);
+        switch(num_args){
+            case 1:
+            {
+            result = calc[choice - 1].func(num_args, arguments[0]);
+            break;
+            }
+            case 2:
+            {
+            result = calc[choice - 1].func(num_args, arguments[0], arguments[1]);
+            break;
+            }
+            case 3:
+            {
+            result = calc[choice - 1].func(num_args, arguments[0], arguments[1], arguments[2]);
+            break;
+            }
+            case 4:
+            {
+            result = calc[choice - 1].func(num_args, arguments[0], arguments[1], arguments[2], arguments[3]);
+            break;
+            }
+            case 5:
+            {
+            result = calc[choice - 1].func(num_args, arguments[0], arguments[1], arguments[2], arguments[3], arguments[4]);
+            break;
+            }
+        }
 
         printf("Результат: %.2lf\n", result);
     }
